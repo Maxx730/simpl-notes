@@ -1,0 +1,29 @@
+#settings-content {
+    margin-top: 68px;
+    padding-left: 65px;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+}
+
+#settings-content #about {
+    display: flex;
+    flex-grow: 1;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    font-size: 12px;
+}
+
+#settings-content .card {
+    align-self: center;
+    width: 95%;
+}
+
+#settings-content .card .card-header p {
+    margin-bottom: 0;
+}
+
+#settings-content.content.focused .content {
+    display: block;
+}

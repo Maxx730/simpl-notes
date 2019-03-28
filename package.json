@@ -1,0 +1,58 @@
+{
+  "name": "SimplNotes",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "build"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^4.1.1",
+    "electron-builder": "^20.39.0"
+  },
+  "dependencies": {
+    "electron-clipboard-extended": "^1.1.1"
+  },
+  "build": {
+    "appId": "simplnotes",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  }
+}

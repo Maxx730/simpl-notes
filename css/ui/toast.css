@@ -1,0 +1,21 @@
+#toast-message {
+    position: fixed;
+    bottom: -100%;
+    padding: 15px;
+    right: 0px;
+    left: 0px;
+    transition: all .25s;
+}
+
+#toast-message.open {
+    bottom: 0px;
+}
+
+#message-content {
+    padding: 15px;
+    background-color: #FFF;
+    border-radius: 5px;
+    box-shadow: 0px 1px 3px 1px rgba(181,181,181,1);
+    font-family: sans-serif;
+    font-size: 12px;
+}
