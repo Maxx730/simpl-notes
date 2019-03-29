@@ -3,7 +3,7 @@ const UiBuilder = require('./lib/ui-builder.js')
 const Toast = require('./lib/toast.js')
 
 let data;
-let screen = "notes";
+let screen = "clipboard";
 
 
 

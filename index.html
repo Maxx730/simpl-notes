@@ -18,19 +18,19 @@
     </div>
     <div id = "note-toggles">
         <div id = "toggles">
-            <button id = "notes" class = "toggle selected">Notes</button>
-            <button id = "clipboard" class = "toggle">Clipboard</button>
+            <button id = "notes" class = "toggle">Notes</button>
+            <button id = "clipboard" class = "toggle selected">Clipboard</button>
             <button id = "settings" class = "toggle">Settings</button>
         </div>
     </div>
-    <div id = "notes-content" class = "content focused">
+    <div id = "notes-content" class = "content">
         <ul id = "note-list">
             <li class = "note-field">
                 <input type = "text"/>
             </li>
         </ul>
     </div>
-    <div id = "clipboard-content" class = "content">
+    <div id = "clipboard-content" class = "content focused">
         <div id = "clipboard-hint">
             Click to Copy
         </div>
@@ -42,11 +42,6 @@
         <div class="field">
             <div class="control">
                 <button class="button is-link" id="clear-clipboard">Clear Clipboard Memory</button>
-            </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-link">Export Data</button>
             </div>
         </div>
         <center>
