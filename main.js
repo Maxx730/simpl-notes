@@ -1,9 +1,13 @@
 const Files = require('./lib/data.js')
-const {app, BrowserWindow, ipcMain } = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut } = require('electron')
 const clipboard = require('electron-clipboard-extended')
+const { toKeyEvent } = require('keyboardevent-from-electron-accelerator');
 
-let mainWindow;
+let mainWindow,shortWindow;
 let data;
+let lastKey = 0;
+let fadeTimeout, shortcutIndex = 0;
+
 
 function createWindow ( data ) {
   mainWindow = new BrowserWindow({
@@ -42,6 +46,61 @@ app.on('ready', () => {
         mainWindow.webContents.on( 'did-finish-load',() => {
             mainWindow.webContents.send( 'loaded-data',file )
         })
+    })
+
+    shortWindow = new BrowserWindow({
+      height: 100,
+      width: 260,
+      x: 20,
+      y: 20,
+      frame: false,
+      useContentSize: true
+    })
+
+    shortWindow.loadFile('popup.html')
+    shortWindow.hide()
+
+    //ADD OUR GLOBAL KEYBOARD SHORTCUTS HERE.
+    globalShortcut.register('CommandOrControl+Right',( event ) => {
+      shortWindow.show()
+
+      if ( shortcutIndex === data.clipboard.length - 1 ) {
+        shortcutIndex = 0;
+      } else {
+        shortcutIndex++;
+      }
+
+      shortWindow.webContents.send('shortcut-tapped',data.clipboard[ shortcutIndex ])
+      clipboard.writeText( data.clipboard[ shortcutIndex ] )
+
+      clearTimeout( fadeTimeout )
+
+      fadeTimeout = setTimeout( function() {
+        shortWindow.hide()
+      },5000 )
+    })
+
+    globalShortcut.register('CommandOrControl+Left',( event ) => {
+      shortWindow.show()
+
+      if ( shortcutIndex === 0 ) {
+        shortcutIndex = data.clipboard.length - 1
+      } else {
+        shortcutIndex--;
+      }
+
+      shortWindow.webContents.send('shortcut-tapped',data.clipboard[ shortcutIndex ])
+      clipboard.writeText( data.clipboard[ shortcutIndex ] )
+
+      clearTimeout( fadeTimeout )
+
+      fadeTimeout = setTimeout( function() {
+        shortWindow.hide()
+      },5000 )
+    })
+
+    globalShortcut.register('CommandOrControl+Enter',() => {
+      shortWindow.hide()
     })
 })
 

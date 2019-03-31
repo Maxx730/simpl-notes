@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Notes</title>
+    <title>kCopy</title>
     <link rel = "stylesheet" href = "css/style.css" type = "text/css"/>
     <link rel = "stylesheet" href = "css/ui/note-list.css" type = "text/css"/>
     <link rel = "stylesheet" href = "css/ui/clip-list.css" type = "text/css"/>
@@ -14,11 +14,9 @@
     <script>
       require('./renderer.js')
     </script>
-    <div id = "red-line">
-    </div>
     <div id = "note-toggles">
         <div id = "toggles">
-            <button id = "notes" class = "toggle">Notes</button>
+            <button id = "notes" class = "toggle hide">Notes</button>
             <button id = "clipboard" class = "toggle selected">Clipboard</button>
             <button id = "settings" class = "toggle">Settings</button>
         </div>
@@ -31,6 +29,9 @@
         </ul>
     </div>
     <div id = "clipboard-content" class = "content focused">
+        <div id = "clipboard-search">
+            <input id="search-clipboard-field" class="input" type="text" placeholder="Search Clipboard">
+        </div>
         <div id = "clipboard-hint">
             Click to Copy
         </div>
@@ -39,10 +40,28 @@
         </ul>
     </div>
     <div id = "settings-content" class = "content">
+        <h2>
+            General
+        </h2>
         <div class="field">
             <div class="control">
                 <button class="button is-link" id="clear-clipboard">Clear Clipboard Memory</button>
             </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <button class="button is-link" id="clear-clipboard">Import</button>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <button class="button is-link" id="clear-clipboard">Export</button>
+            </div>
+        </div>
+        <div id = "latest-updates">
+            <h2>
+                Latest Updates
+            </h2>
         </div>
         <center>
             <div id = "about">

@@ -27,7 +27,12 @@ ipcRenderer.on( 'loaded-data',( event,arg ) => {
                 RenderClipBoard ( data )
             break;
         }
-    } );
+    },[{
+        id:'search-clipboard-field',
+        callback: ( term ) => {
+            RenderClipBoard( data,term )
+        }
+    }]);
 })
 
 //Renders all the input lines based on the size of the window.
@@ -76,19 +81,32 @@ function InitInputEvents () {
     }
 }
 
-function RenderClipBoard ( data ) {
+function RenderClipBoard ( data,search ) {
     document.getElementById('clipboard-list').innerHTML = ''
     let items = [];
 
     for ( let i = data.clipboard.length - 1;i > 0;i-- ) {
-        item = document.createElement('LI');
-        item.classList.add('clip');
-        item.innerText = data.clipboard[i]
-        item.addEventListener('click', ( event ) => {
-            ipcRenderer.send( 'apply-clipboard',event.target.innerText )
-            Toast.ShowToast( 'Saved to Clipboard!',1500 )
-        })
-        items.push( item )
+        if ( search !== undefined) {
+            if ( data.clipboard[i].includes( search ) ) {
+                item = document.createElement('LI');
+                item.classList.add('clip');
+                item.innerText = data.clipboard[i]
+                item.addEventListener('click', ( event ) => {
+                    ipcRenderer.send( 'apply-clipboard',event.target.innerText )
+                    Toast.ShowToast( 'Saved to Clipboard!',1500 )
+                })
+                items.push( item )
+            }
+        } else {
+            item = document.createElement('LI');
+            item.classList.add('clip');
+            item.innerText = data.clipboard[i]
+            item.addEventListener('click', ( event ) => {
+                ipcRenderer.send( 'apply-clipboard',event.target.innerText )
+                Toast.ShowToast( 'Saved to Clipboard!',1500 )
+            })
+            items.push( item )
+        }
     }
     
     items.forEach( item => {

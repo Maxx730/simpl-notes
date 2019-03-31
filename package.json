@@ -18,11 +18,12 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^4.1.1",
-    "electron-builder": "^20.39.0"
+    "electron": "latest",
+    "electron-builder": "latest"
   },
   "dependencies": {
-    "electron-clipboard-extended": "^1.1.1"
+    "electron-clipboard-extended": "^1.1.1",
+    "keyboardevent-from-electron-accelerator": "^1.1.0"
   },
   "build": {
     "appId": "simplnotes",
@@ -50,9 +51,5 @@
       "target": "NSIS",
       "icon": "build/icon.ico"
     }
-  },
-  "devDependencies": {
-    "electron": "latest",
-    "electron-builder": "latest"
   }
 }

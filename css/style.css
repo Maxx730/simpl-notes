@@ -1,9 +1,19 @@
+@font-face {
+    font-family: Roboto;
+    src: url(../fonts/roboto/Roboto-Regular.ttf);
+}
+
 html,body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    font-family: Roboto!important;
+}
+
+.hide {
+    display: none!important;
 }
 
 #red-line {
@@ -36,15 +46,16 @@ html,body {
     cursor: pointer;
     border: none;
     outline: none;
-    border-bottom: solid 3px #FFF;
+    border-bottom: solid 3px #F2F5FA;
+    background-color: #FFF;
 }
 
 #note-toggles #toggles button:hover {
-    border-bottom: solid 3px #EBEEF3;
+    border-bottom: solid 2px #EBEEF3;
 }
 
 #note-toggles #toggles button.selected {
-    border-bottom: solid 3px #489BF6;
+    border-bottom: solid 2px #489BF6;
 }
 
 .content {
