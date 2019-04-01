@@ -32,7 +32,23 @@ ipcRenderer.on( 'loaded-data',( event,arg ) => {
         callback: ( term ) => {
             RenderClipBoard( data,term )
         }
+    },{
+        id:'export-clipboard',
+        callback: () => {
+            ipcRenderer.send( 'export-clipboard',data )
+        }
+    },{
+        id:'import-clipboard',
+        callback: () => {
+            ipcRenderer.send( 'import-clipboard',null )
+        }
     }]);
+})
+
+ipcRenderer.on('data-imported',( event,args ) => {
+    data = args;
+
+    RenderClipBoard( data )
 })
 
 //Renders all the input lines based on the size of the window.

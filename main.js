@@ -1,7 +1,9 @@
 const Files = require('./lib/data.js')
-const {app, BrowserWindow, ipcMain, globalShortcut } = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut, dialog } = require('electron')
 const clipboard = require('electron-clipboard-extended')
 const { toKeyEvent } = require('keyboardevent-from-electron-accelerator');
+const type = require('file-type')
+const buff = require('read-chunk')
 
 let mainWindow,shortWindow;
 let data;
@@ -32,6 +34,41 @@ ipcMain.on( 'save-data',( event,args ) => {
             data = file;
             mainWindow.webContents.send( 'loaded-data',file )
         })
+    })
+})
+
+ipcMain.on('export-clipboard',( event,args ) => {
+    dialog.showSaveDialog( mainWindow,{
+        defaultPath: 'kcopy-backup.json'
+    },( path ) => {
+        if ( path !== null && path !== undefined ) {
+            Files.CreateFile( path,data,null )
+        }
+    })
+})
+
+ipcMain.on('import-clipboard',( event,args ) => {
+    dialog.showOpenDialog( mainWindow,{
+        filters:[
+            { name:'JSON',extensions:['json'] }
+        ]
+    },( path ) => {
+        if ( path !== null && path !== undefined && path.length > 0 ) {
+            let chunk = buff.sync( path[0],0,type.minimumBytes );
+
+            if ( type(chunk) === null ) {
+                Files.ReadFile( path[0],( data ) => {
+                    let temp = JSON.parse( data )
+                    
+                    if ( temp.clipboard !== null ) {
+                        data = temp;
+                        Files.CreateFile( 'data/data.json',data,() => {
+                            mainWindow.webContents.send('data-imported',data)
+                        })
+                    }
+                })
+            }
+        }
     })
 })
 
