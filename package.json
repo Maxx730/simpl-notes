@@ -8,7 +8,7 @@
     "dist": "build"
   },
   "repository": "https://github.com/Maxx730/simpl-notes",
-  "author": "John Kinghorn",
+  "author": "John M Kinghorn",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "latest",
