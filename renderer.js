@@ -126,7 +126,7 @@ function RenderClipBoard ( data,search ) {
     document.getElementById('clipboard-list').innerHTML = ''
     let items = [];
 
-    for ( let i = data.clipboard.length - 1;i > 0;i-- ) {
+    for ( let i = data.clipboard.length - 1;i > -1;i-- ) {
         if ( search !== undefined) {
             if ( data.clipboard[i].includes( search ) ) {
                 item = document.createElement('LI');
