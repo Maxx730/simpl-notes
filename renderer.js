@@ -108,7 +108,6 @@ function InitInputEvents () {
 
     for ( let i = 0;i < fields.length;i++ ) {
         fields[i].addEventListener('change', ( event ) => {
-            console.log("working")
             let id = event.target.id.split('-')[2]
 
             data.notes[i] = {
