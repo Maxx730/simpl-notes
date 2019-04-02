@@ -1,20 +1,13 @@
 {
-  "name": "SimplNotes",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "kCopy",
+  "version": "1.1.0",
+  "description": "Clipboard management tool.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "dist": "build"
   },
   "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
@@ -23,9 +16,13 @@
   },
   "dependencies": {
     "electron-clipboard-extended": "^1.1.1",
+    "electron-google-analytics": "^0.1.0",
     "file-type": "^10.10.0",
     "keyboardevent-from-electron-accelerator": "^1.1.0",
-    "read-chunk": "^3.2.0"
+    "node-storage": "0.0.7",
+    "read-chunk": "^3.2.0",
+    "universal-analytics": "^0.4.20",
+    "uuid": "^3.3.2"
   },
   "build": {
     "appId": "simplnotes",

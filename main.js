@@ -4,11 +4,15 @@ const clipboard = require('electron-clipboard-extended')
 const { toKeyEvent } = require('keyboardevent-from-electron-accelerator');
 const type = require('file-type')
 const buff = require('read-chunk')
+const ua = require('universal-analytics')
+let user;
+const { TrackEvent } = require('./lib/analytics.js')
 
 let mainWindow,shortWindow;
 let data;
 let lastKey = 0;
 let fadeTimeout, shortcutIndex = 0;
+let dialogOpen = false;
 
 
 function createWindow ( data ) {
@@ -23,6 +27,7 @@ function createWindow ( data ) {
 
 mainWindow.loadFile('index.html')
   mainWindow.on('closed', function () {
+    TrackEvent( user,'APPLICATION','CLOSED' )
     mainWindow = null
   })
 }
@@ -38,16 +43,25 @@ ipcMain.on( 'save-data',( event,args ) => {
 })
 
 ipcMain.on('export-clipboard',( event,args ) => {
+  if ( !dialogOpen ) {
+    dialogOpen = true;
     dialog.showSaveDialog( mainWindow,{
         defaultPath: 'kcopy-backup.json'
     },( path ) => {
         if ( path !== null && path !== undefined ) {
-            Files.CreateFile( path,data,null )
+            Files.CreateFile( path,data,() => {
+              
+            } )
         }
+
+        dialogOpen = false;
     })
+  }
 })
 
 ipcMain.on('import-clipboard',( event,args ) => {
+  if ( !dialogOpen ) {
+    dialogOpen = true;
     dialog.showOpenDialog( mainWindow,{
         filters:[
             { name:'JSON',extensions:['json'] }
@@ -64,15 +78,20 @@ ipcMain.on('import-clipboard',( event,args ) => {
                         data = temp;
                         Files.CreateFile( 'data/data.json',data,() => {
                             mainWindow.webContents.send('data-imported',data)
+                            
                         })
                     }
                 })
             }
         }
+
+        dialogOpen = false;
     })
+  }
 })
 
 ipcMain.on( 'apply-clipboard',(event,args) => {
+    TrackEvent( user,'CLIPBOARD','APPLIED' )
     clipboard.writeText( args )
 })
 
@@ -80,6 +99,12 @@ app.on('ready', () => {
     Files.CheckForFile( 'data',( file ) => {
         createWindow( file );
         data = file;
+        user = ua( 'UA-85720731-3',data.preferences.userId )
+    
+        global.TrackEvent = TrackEvent;
+        global.User = user;
+        
+        TrackEvent( user,"APPLICATION","OPENED" )
         mainWindow.webContents.on( 'did-finish-load',() => {
             mainWindow.webContents.send( 'loaded-data',file )
         })
@@ -101,11 +126,15 @@ app.on('ready', () => {
     globalShortcut.register('CommandOrControl+Right',( event ) => {
       shortWindow.show()
 
-      if ( shortcutIndex === data.clipboard.length - 1 ) {
-        shortcutIndex = 0;
-      } else {
-        shortcutIndex++;
+      if ( data.clipboard.length > 0) {
+        if ( shortcutIndex === data.clipboard.length - 1 ) {
+          shortcutIndex = 0;
+        } else {
+          shortcutIndex++;
+        }
       }
+
+      TrackEvent( user,'SHORTCUT','RIGHT' )
 
       shortWindow.webContents.send('shortcut-tapped',data.clipboard[ shortcutIndex ])
       clipboard.writeText( data.clipboard[ shortcutIndex ] )
@@ -114,17 +143,21 @@ app.on('ready', () => {
 
       fadeTimeout = setTimeout( function() {
         shortWindow.hide()
-      },5000 )
+      },data.preferences.shortcutTimeout * 1000 )
     })
 
     globalShortcut.register('CommandOrControl+Left',( event ) => {
       shortWindow.show()
-
-      if ( shortcutIndex === 0 ) {
-        shortcutIndex = data.clipboard.length - 1
-      } else {
-        shortcutIndex--;
+      
+      if ( data.clipboard.length > 0) {
+        if ( shortcutIndex === 0 ) {
+          shortcutIndex = data.clipboard.length - 1
+        } else {
+          shortcutIndex--;
+        }
       }
+
+      TrackEvent( user,'SHORTCUT','LEFT' )
 
       shortWindow.webContents.send('shortcut-tapped',data.clipboard[ shortcutIndex ])
       clipboard.writeText( data.clipboard[ shortcutIndex ] )
@@ -133,7 +166,7 @@ app.on('ready', () => {
 
       fadeTimeout = setTimeout( function() {
         shortWindow.hide()
-      },5000 )
+      },data.preferences.shortcutTimeout * 1000 )
     })
 
     globalShortcut.register('CommandOrControl+Enter',() => {

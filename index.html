@@ -65,16 +65,35 @@
                 <h3>
                     Shortcut Indicator Time (Seconds)
                 </h3>
-                <input class="input" type="text" placeholder="Indicator Timeout" value = "5">
+                <input class="input" type="number" placeholder="Indicator Timeout" id="shortcutTimeout" value = "5">
                 <subtext>
                     Sets the amout of time the shortcut indicator shows.
                 </subtext>
+            </div>
+        </div>
+        <div class = "field">
+            <div class = "control">
+                <button class="button is-rounded" id="save-changes" disabled>Save Changes</button>
             </div>
         </div>
         <div id = "latest-updates">
             <h2>
                 Latest Updates
             </h2>
+            <ul>
+                <li>
+                    Updated Settings
+                </li>
+                <li>
+                    Added Ctrl+Left/Ctrl+Right shortcut for selecting previous clipboards.
+                </li>
+                <li>
+                    Added Import/Export functionality.
+                </li>
+                <li>
+                    Added timeout setting for how long the shortcut indicator displays.
+                </li>
+            </ul>
         </div>
         <center>
             <div id = "about">

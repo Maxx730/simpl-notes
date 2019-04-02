@@ -1,13 +1,16 @@
 const { ipcRenderer } = require( 'electron' )
+const { getGlobal } = require('electron').remote
+const Track = getGlobal('TrackEvent')
+const User = getGlobal('User')
 const UiBuilder = require('./lib/ui-builder.js')
 const Toast = require('./lib/toast.js')
+const uuid = require('uuid')
 
 let data;
 let screen = "clipboard";
 
-
-
 ipcRenderer.on( 'loaded-data',( event,arg ) => {
+    Track( User,'DATA LOADED','LOADED' )
     //Once the data has been loaded we can fill out the data however we want in the ui;
     switch ( screen ) {
         case "notes" :
@@ -17,6 +20,8 @@ ipcRenderer.on( 'loaded-data',( event,arg ) => {
             RenderClipBoard( arg )
         break;
     }
+
+    document.getElementById('shortcutTimeout').value = arg.preferences.shortcutTimeout;
     
     data = arg;
     UiBuilder.Build( data,( tar ) => {
@@ -35,19 +40,39 @@ ipcRenderer.on( 'loaded-data',( event,arg ) => {
     },{
         id:'export-clipboard',
         callback: () => {
+            Track( User,'CLIPBOARD','EXPORTED' )
             ipcRenderer.send( 'export-clipboard',data )
         }
     },{
         id:'import-clipboard',
         callback: () => {
+            Track( User,'CLIPBOARD','IMPORTED' )
             ipcRenderer.send( 'import-clipboard',null )
+        }
+    },{
+        id:'clipboard-cleard',
+        callback: () => {
+            TrackEvent( User,'CLIPBOARD','CLEARED' )
+        }
+    },{
+        id:'set-timeout',
+        callback: ( val ) => {
+            data.preferences.shortcutTimeout = val;
+            Track( User,'SHORTCUT','TIME CHANGED' )
+        }
+    },{
+        id:'apply-changes',
+        callback: () => {
+            Track( User,'SETTINGS','APPLIED' )
+            Toast.ShowToast( 'Settings Saved',2500 )
+            ipcRenderer.send( 'save-data',data )
         }
     }]);
 })
 
 ipcRenderer.on('data-imported',( event,args ) => {
     data = args;
-
+    Toast.ShowToast( 'Clipboard Imported!',2500 )
     RenderClipBoard( data )
 })
 
